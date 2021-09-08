@@ -1,6 +1,7 @@
 import http
 
 from flask_restful import fields, reqparse, Resource, marshal_with
+from src.dog_face_detector.dog_detector import detect_dog_face_from_string
 
 # Fields returned by the src for the Images resource
 images_fields = {
@@ -23,11 +24,12 @@ class Images(Resource):
         """
         args = self.create_args.parse_args()
         imagesToProcess = args['petImages']
+        preprocessedImage = detect_dog_face_from_string(imagesToProcess[0])
         # TODO: process images
-        return {'petImages': imagesToProcess}, http.HTTPStatus.OK
+        return {'petImages': [preprocessedImage]}, http.HTTPStatus.OK
 
 
 def _create_images_request_parser():
     images_request_parser = reqparse.RequestParser()
-    images_request_parser.add_argument("petImages", type=list, help="The images are required", required=True)
+    images_request_parser.add_argument("petImages", type=str, action='append', help="The images are required", required=True)
     return images_request_parser
