@@ -4,7 +4,6 @@ import base64
 
 filename1 = 'dog.jpeg'
 filename2 = 'two_dogs.jpg'
-# filename = 'milka.jpg'
 files = [filename1, filename2]
 img_strings = []
 for file in files:
