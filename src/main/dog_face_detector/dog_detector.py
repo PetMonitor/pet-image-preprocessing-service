@@ -26,9 +26,9 @@ def detect_dog_face_from_string(image):
 
 def detect_dog_face(img):
     h, w, _ = img.shape
-    if h > 1000 or w > 1000:
+    if h > 300 or w > 300:
         # new code to resize image but keeping the aspect ratio at the same time
-        img = imutils.resize(img, width=1000)
+        img = imutils.resize(img, width=300)
 
     # Change image from BGR (blue, green, red) to RGB (red, green, blue)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -53,26 +53,20 @@ def detect_dog_face(img):
 
         right_eye = shape[5]
         left_eye = shape[2]
-
         dx = left_eye[0] - right_eye[0]
         dy = -(left_eye[1] - right_eye[1]) # we flip this since image has (0,0) in top left corner instead of bottom left corner like in math
-
         alpha = math.degrees(math.atan2(dy, dx))
 
         (h, w) = img.shape[:2]
         (cX, cY) = right_eye[:2]
-        print(cX)
-        print(cY)
         M = cv2.getRotationMatrix2D((int(cX), int(cY)), -alpha, 1.0)
 
         input_points = np.array([[[x1, y1]], [[x2, y2]]])
-        print(input_points)
         result = cv2.transform(input_points, M)
-        print(result)
 
         # Create a copy of the image
         img_result = img.copy()
-        rotated_img = cv2.warpAffine(img_result, M, (w, h))
+        img_result = cv2.warpAffine(img_result, M, (w, h))
 
         # COMMENT TO SEE ROTATION POINTS
         # cv2.circle(img_3, center=tuple(result[0][0]), radius=3, color=(0, 0, 255), thickness=-1, lineType=cv2.LINE_AA)
@@ -96,12 +90,12 @@ def detect_dog_face(img):
         if dy > dx:
             new_x1 = new_x1 - (dif // 2)
             new_x2 = new_x2 + (dif // 2)
-        rotated_img = rotated_img[new_y1 if new_y1 >= 0 else 0 :new_y2, new_x1 if new_x1 >= 0 else 0:new_x2]
+        img_result = img_result[new_y1 if new_y1 >= 0 else 0 :new_y2, new_x1 if new_x1 >= 0 else 0:new_x2]
 
-        rotated_img = cv2.resize(rotated_img, (224, 224))
-        result = cv2.cvtColor(rotated_img, cv2.COLOR_RGB2BGR)
+        img_result = cv2.resize(img_result, (224, 224))
+        img_result = cv2.cvtColor(img_result, cv2.COLOR_RGB2BGR)
 
-        _, buffer_img = cv2.imencode('.png', result)
+        _, buffer_img = cv2.imencode('.png', img_result)
         results.append(base64.b64encode(buffer_img).decode())
 
     return results
