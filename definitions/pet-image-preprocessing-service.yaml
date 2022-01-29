@@ -1,0 +1,71 @@
+swagger: "2.0"
+info:
+  description: "The API describes the entities involved and requests handled by the service that is responsible for preparing the images to be a valid input to the pet recognition model."
+  version: "0.0.1"
+  title: "Pet image pre-processing service API"
+
+# host: TODO: put heroku link
+tags:
+- name: "images"
+  description: "Management of images"
+
+schemes:
+- "https"
+
+#########################################################
+#                         PATHS                         #
+#########################################################
+paths:
+  /preprocessed-images:
+    post:
+      tags:
+      - "images"
+      summary: "Applies all the preprocessing operations to the input images and retrieves the results which are ready for the CNN model"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: object
+          properties:
+            pet_images:
+              $ref: "#/definitions/petImages"
+      responses:
+        200:
+          description: "Pet images successfully retrieved"
+          schema:
+            properties:
+              pet_images:
+                $ref: '#/definitions/petImages'
+        400:
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/errorResponse"
+        500:
+          description: "Internal server error"
+          schema:
+            $ref: "#/definitions/errorResponse"
+
+#########################################################
+#                      DEFINITIONS                      #
+#########################################################
+definitions:
+  petImages:
+    description: Set of images of a pet.
+    type: array
+    items:
+      type: string
+      format: binary
+    minItems: 1
+
+  errorResponse:
+    type: object
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
