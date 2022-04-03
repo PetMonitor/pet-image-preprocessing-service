@@ -26,7 +26,9 @@ class Images(Resource):
         images_to_process = args['petImages']
         preprocessed_images = []
         for image in images_to_process:
-            preprocessed_images.append(detect_dog_face_from_string(image))
+            res = detect_dog_face_from_string(image)
+            print("detect_dog_face_from_string returned {}".format(str(res)))
+            preprocessed_images.append(res)
         return {
                    'petImages': preprocessed_images
                }, http.HTTPStatus.OK
