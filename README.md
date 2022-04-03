@@ -1,6 +1,7 @@
 # Pet Image Pre-processing Service
 Server that preprocess the pet images, applying cropping, resizing and rotations to make them suitable for the recognition model.
 
+
 # Run project locally
 
 - Create virtual environment in this directory:
@@ -20,3 +21,4 @@ Server that preprocess the pet images, applying cropping, resizing and rotations
 If it fails with an error in cv2 saying it is unable to find 'image', try this:
 
 - `python3 -m pip install --force-reinstall opencv-python`
+
