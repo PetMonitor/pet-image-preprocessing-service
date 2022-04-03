@@ -26,9 +26,9 @@ def detect_dog_face_from_string(image):
 
 def detect_dog_face(img):
     h, w, _ = img.shape
-    if h > 500 or w > 500:
+    if h > 1000 or w > 1000:
         # new code to resize image but keeping the aspect ratio at the same time
-        img = imutils.resize(img, width=500)
+        img = imutils.resize(img, width=1000)
 
     # Change image from BGR (blue, green, red) to RGB (red, green, blue)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
